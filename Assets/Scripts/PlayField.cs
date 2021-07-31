@@ -6,15 +6,24 @@ public class PlayField : MonoBehaviour {
 
     public static PlayField instance;
 
+    public int gridSizeX, gridSizeY, gridSizeZ;
+    [Header("Blocks")]
+    public GameObject[] blockList;
+
+    [Header("Playfield Visuals")]
     public GameObject bottomPlane;
     public GameObject N, S, W, E;
 
-    public int gridSizeX, gridSizeY, gridSizeZ;
     public Transform[,,] theGrid;
 
     void Awake()
     {
         instance = this;
+    }
+
+    void Start()
+    {
+        theGrid = new Transform[gridSizeX, gridSizeY, gridSizeZ];
     }
 
     public Vector3 Round(Vector3 vec)
@@ -30,6 +39,75 @@ public class PlayField : MonoBehaviour {
             (int)pos.z >= 0 && (int)pos.z < gridSizeZ &&
             (int)pos.y >= 0); 
     }
+
+    //update grid method for position of tetris block
+    //using nested for loops
+    public void UpdateGrid(TetrisBlock block)
+    {
+        //if x is less then max number of tetris block on grid of x axis continue to keep generating
+        //Delete Possible Parent Objects
+        for (int x = 0; x < gridSizeX; x++)
+        {
+            //continue to generate blocks on till max grid is filled
+            for (int z = 0; z < gridSizeZ; z++)
+            {
+                //continue to have blocks fall from y axis till y axis is all filled up
+                for(int y = 0; y < gridSizeY; y++)
+                {
+                    if(theGrid[x,y,z] != null)
+                    {
+                        //if grid fills all x,y,z coordinates
+                        if (theGrid[x, y, z].parent == block.transform)
+                        {
+                            theGrid[x, y, z] = null;
+                        }
+                    }
+                }
+            }
+        }
+
+        //for each child of block generated, fill in all child objects
+        foreach(Transform child in block.transform)
+        {
+            //be able to rotate position of gameobject
+            Vector3 pos = Round(child.position);
+            //if pos of y is less then gridsize od y axis
+            if(pos.y < gridSizeY)
+            {
+                //gameobject of block is stuck within that x,y,z grid axis
+                theGrid[(int)pos.x, (int)pos.y, (int)pos.z] = child;
+            }
+        }
+    }
+
+    public Transform GetTransformOnGridPos(Vector3 pos)
+    {
+        if(pos.y > gridSizeY-1)
+        {
+            return null;
+        }
+        else
+        {
+            return theGrid[(int)pos.x, (int)pos.y, (int)pos.z];
+        }
+    }
+
+    //spawn new block one original one lands and fits the grid
+    public void SpawnNewBlock()
+    {
+        Vector3 spawnPoint = new Vector3((int)(transform.position.x + (float)gridSizeX / 2),
+                                            (int)transform.position.y + gridSizeY,
+                                            (int)(transform.position.z + (float)gridSizeZ / 2));
+        int randomIndex = Random.Range(0, blockList.Length);
+
+        //SPAWN THE BLOCK
+        GameObject newBlock = Instantiate(blockList[randomIndex], spawnPoint, Quaternion.identity) as GameObject;
+        //GHOST
+
+        //SET INPUTS
+    }
+
+
 
 
     void OnDrawGizmos()

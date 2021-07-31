@@ -25,11 +25,12 @@ public class TetrisBlock : MonoBehaviour {
                 
                 enabled = false;
                 //CREATE A NEW TETRIS BLOCK
+                PlayField.instance.SpawnNewBlock();
             } 
             else
             {
                 //UPDATE THE GRID
-
+                PlayField.instance.UpdateGrid(this);
             }
 
             prevTime = Time.time;
@@ -37,6 +38,7 @@ public class TetrisBlock : MonoBehaviour {
 
     }
 
+    //check if object touches the ground or another object an within distance and shape
     bool CheckValidMove()
     {
         foreach(Transform child in transform)
@@ -48,6 +50,15 @@ public class TetrisBlock : MonoBehaviour {
             }
         }
 
+        foreach(Transform child in transform)
+        {
+            Vector3 pos = PlayField.instance.Round(child.position);
+            Transform t = PlayField.instance.GetTransformOnGridPos(pos);
+            if(t!=null && t.parent !=transform)
+            {
+                return false;
+            }
+        }
         return true;
     }
 }
