@@ -4,11 +4,33 @@ using UnityEngine;
 
 public class PlayField : MonoBehaviour {
 
+    public static PlayField instance;
+
     public GameObject bottomPlane;
     public GameObject N, S, W, E;
 
     public int gridSizeX, gridSizeY, gridSizeZ;
     public Transform[,,] theGrid;
+
+    void Awake()
+    {
+        instance = this;
+    }
+
+    public Vector3 Round(Vector3 vec)
+    {
+        return new Vector3(Mathf.RoundToInt(vec.x),
+                        Mathf.RoundToInt(vec.y),
+                        Mathf.RoundToInt(vec.z));
+    }
+
+    public bool CheckInsideGrid(Vector3 pos)
+    {
+        return ((int)pos.x >= 0 && (int)pos.x < gridSizeX &&
+            (int)pos.z >= 0 && (int)pos.z < gridSizeZ &&
+            (int)pos.y >= 0); 
+    }
+
 
     void OnDrawGizmos()
     {
