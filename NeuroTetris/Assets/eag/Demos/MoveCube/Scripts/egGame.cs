@@ -58,10 +58,10 @@ public class egGame : MonoBehaviour {
 			startTime = Time.time;
 			egBeginSession (); 
 		}
-		//duration = Time.time - startTime;			
-		//if (duration >= GameLength) {  //is game time over?
-		//	EndGame();
-		//}
+		duration = Time.time - startTime;			
+		if (duration >= GameLength) {  //is game time over?
+			EndGame();
+		}
 		//Get translated game input from SUKI
 		egGetSukiInput ();
     }
@@ -72,9 +72,6 @@ public class egGame : MonoBehaviour {
 	public void PauseGame() {
 		//print("Game is Paused...");
 		isPaused = true;
-		Tracker.Instance.Interrupt((int)egEvent.Type.CustomEvent, "GameEnd");
-		Tracker.Instance.StopTracking();
-		NetworkClientConnect.Instance.Disconnect(); // this will disconnect form the avatar server! remember to disconnect each time you change the time scale or you change scene
 		Time.timeScale = 0;
 		Time.fixedDeltaTime = 0;
 		AudioListener.volume = 0;
@@ -86,7 +83,6 @@ public class egGame : MonoBehaviour {
 	public void UnPauseGame (){
 		//print("Unpause");
 		isPaused = false;
-		Tracker.Instance.BeginTracking();
 		Time.timeScale = 1.0f;
 		Time.fixedDeltaTime = 0.02f;
 		AudioListener.volume = 1.0f;
@@ -154,7 +150,7 @@ public class egGame : MonoBehaviour {
 	//egFloat,etc. are custom variables that can be attached to parameters in the settings menu and portal
 	//They are attached to the parameters in the egAwake function below.
 	egFloat Speed=1.0f;		//speed of player
-	//egFloat Gravity=-1.0f;	//falling cylinder's gravity (-1.0 is unity default)
+	egFloat Gravity=-1.0f;	//falling cylinder's gravity (-1.0 is unity default)
 	egInt GameLength=300; 	//in seconds
 
 	// Use this for initialization
@@ -179,11 +175,11 @@ public class egGame : MonoBehaviour {
 		//NOTE:Binding will be skipped if ParameterHandler not loaded (i.e. running this scene 
 		//without first running MainMenu scene)
 		//Also, parameters must be added to DefaultParameters.json file (located in StreamingAssets folder).
-		VariableHandler.Instance.Register (ParameterStrings.STARTING_SPEED, Speed);
+		//VariableHandler.Instance.Register (ParameterStrings.STARTING_SPEED, Speed);
 		//VariableHandler.Instance.Register (ParameterStrings.GRAVITY, Gravity);
 		VariableHandler.Instance.Register (egParameterStrings.GAME_LENGTH, GameLength);
 		print ("Speed=" + Speed);
-		//print ("Gravity=" + Gravity);
+		print ("Gravity=" + Gravity);
 		print ("GameLength=" + GameLength);
 	}
 
@@ -264,7 +260,7 @@ public class egGame : MonoBehaviour {
 			}
 			// move the object
             Vector3 pos = PlayerObject.transform.localPosition;  //REPLACE PlayerObject with whatever object or vector you want to be updated
-			pos.x = pos.x + (xPercent * Speed / 25); // we use speed as a position scaler
+			pos.x = pos.x + (xPercent * Speed/40); // we use speed as a position scaler
 			PlayerObject.transform.localPosition = pos;
 		}
 		//shoulder profile is set as "joystick"
@@ -284,7 +280,7 @@ public class egGame : MonoBehaviour {
 			}
 
 			Vector3 pos = PlayerObject.transform.localPosition; //REPLACE PlayerObject with whatever object or vector you want to be updated
-			pos.z = pos.z + (xPercent * Speed / 20); // we use speed as position scaler
+			pos.x = pos.x + (xPercent * Speed/40); // we use speed as position scaler
 			PlayerObject.transform.localPosition = pos;
 		}
 
@@ -340,7 +336,7 @@ public class egGame : MonoBehaviour {
 			//PlayerObject.transform.position = Vector3.Lerp(LeftFoot.transform.position, new Vector3(newX, newY, newZ), 1f);
 			PlayerObject.transform.localPosition = pos;
 		}
-		//checkRange ();
+		checkRange ();
 	}
 	void checkRange()
 	{

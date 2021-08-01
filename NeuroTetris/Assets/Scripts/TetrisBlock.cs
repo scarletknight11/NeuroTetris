@@ -6,11 +6,12 @@ using enableGame;
 public class TetrisBlock : MonoBehaviour {
 
     float prevTime;
-    egFloat fallTime = 1f;
+    float fallTime = 1f;
+    egFloat fall = 1f;
 
     void Awake()
     {
-        VariableHandler.Instance.Register(ParameterStrings.STARTING_SPEED, fallTime);
+        VariableHandler.Instance.Register(ParameterStrings.STARTING_SPEED, fall);
     }
 
     void Start()
@@ -71,7 +72,7 @@ public class TetrisBlock : MonoBehaviour {
                 SetInput(Vector3.back);
             }
 
-        if (Input.GetKeyDown(KeyCode.UpArrow)) {
+            if (Input.GetKeyDown(KeyCode.UpArrow)) {
                 //SetInput(Vector3.forward);
                 SetRotationInput(new Vector3(90, 0, 0));
             }
@@ -136,6 +137,6 @@ public class TetrisBlock : MonoBehaviour {
 
     public void SetSpeed()
     {
-        fallTime = 0.1f;
+       fallTime = 0.1f;
     }
 }

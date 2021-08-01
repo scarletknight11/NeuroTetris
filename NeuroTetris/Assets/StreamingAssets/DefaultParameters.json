@@ -83,17 +83,15 @@
 
             {
                 "min_": 1.0,
-                "max_": 10.0,
+                "max_": 50.0,
                 "value_": 1.0,
                 "tick_": 0.5,
                 "name": "Tetris Block Speed",
                 "alias": "Tetris Block Speed",
-                "description": "Starting speed for the blocks",
+                "description": "Starting speed for the Blocks",
                 "$type": "RangeParameter",
                 "$id": "7"
             }
-			
-
         ]
     },
     "parameters": {

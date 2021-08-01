@@ -10,5 +10,4 @@
 public class ParameterStrings
 {
     public static string STARTING_SPEED = "Tetris Block Speed";
-	public static string GRAVITY = "Gravity";
 }
