@@ -64,5 +64,6 @@ public class ButtonInput : MonoBehaviour {
     public void SetHighSpeed()
     {
         activeTetris.SetSpeed();
+        TrafficLight.sendRed();
     }
 }

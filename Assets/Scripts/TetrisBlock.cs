@@ -47,6 +47,7 @@ public class TetrisBlock : MonoBehaviour {
 
             if(Input.GetKeyDown(KeyCode.LeftArrow)) 
             {
+                //TrafficLight.sendRed();
                 SetInput(Vector3.left);
             }
 
@@ -97,8 +98,9 @@ public class TetrisBlock : MonoBehaviour {
         foreach(Transform child in transform)
         {
             Vector3 pos = PlayField.instance.Round(child.position);
-            if(!PlayField.instance.CheckInsideGrid(pos))
+            if (!PlayField.instance.CheckInsideGrid(pos))
             {
+                TrafficLight.sendGreen();
                 return false;
             }
         }
@@ -109,6 +111,7 @@ public class TetrisBlock : MonoBehaviour {
             Transform t = PlayField.instance.GetTransformOnGridPos(pos);
             if(t!=null && t.parent !=transform)
             {
+                TrafficLight.sendYellow();
                 return false;
             }
         }
