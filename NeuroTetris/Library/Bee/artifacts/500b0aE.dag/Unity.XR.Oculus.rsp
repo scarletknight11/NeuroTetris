@@ -109,6 +109,16 @@
 -define:XR_MGMT_GTE_320
 -define:CSHARP_7_OR_LATER
 -define:CSHARP_7_3_OR_NEWER
+-r:"Assets/DllSwitcher/Editor/DllSwitcher.dll"
+-r:"Assets/eag/3rd Party/Plugins/TinyJSON.dll"
+-r:"Assets/eag/enablegames/Plugins/Release/eaglib.dll"
+-r:"Assets/eag/enablegames/Plugins/Release/unet.dll"
+-r:"Assets/eag/enablegames/Plugins/Release/uneted.dll"
+-r:"Assets/eag/enablegames/Tracking/Demigiant/DOTween/DOTween.dll"
+-r:"Assets/eag/enablegames/Tracking/Demigiant/DOTween/DOTween43.dll"
+-r:"Assets/eag/enablegames/Tracking/Demigiant/DOTween/DOTween46.dll"
+-r:"Assets/eag/enablegames/Tracking/Demigiant/DOTween/DOTween50.dll"
+-r:"Assets/eag/enablegames/Tracking/Demigiant/DOTween/Editor/DOTweenEditor.dll"
 -r:"C:/Program Files/Unity/Hub/Editor/2021.1.13f1/Editor/Data/Managed/UnityEditor.Graphs.dll"
 -r:"C:/Program Files/Unity/Hub/Editor/2021.1.13f1/Editor/Data/Managed/UnityEngine/UnityEditor.CoreModule.dll"
 -r:"C:/Program Files/Unity/Hub/Editor/2021.1.13f1/Editor/Data/Managed/UnityEngine/UnityEditor.DeviceSimulatorModule.dll"

@@ -1,11 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using enableGame;
 
 public class TetrisBlock : MonoBehaviour {
 
     float prevTime;
-    float fallTime = 1f;
+    egFloat fallTime = 1f;
+
+    void Awake()
+    {
+        VariableHandler.Instance.Register(ParameterStrings.STARTING_SPEED, fallTime);
+    }
 
     void Start()
     {
@@ -55,7 +61,17 @@ public class TetrisBlock : MonoBehaviour {
                 SetInput(Vector3.right);
             }
 
-            if (Input.GetKeyDown(KeyCode.UpArrow)) {
+            if (Input.GetKeyDown(KeyCode.W))
+            {
+                 SetInput(Vector3.forward);
+            }
+
+            if (Input.GetKeyDown(KeyCode.S))
+            {
+                SetInput(Vector3.back);
+            }
+
+        if (Input.GetKeyDown(KeyCode.UpArrow)) {
                 //SetInput(Vector3.forward);
                 SetRotationInput(new Vector3(90, 0, 0));
             }
