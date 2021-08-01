@@ -9,10 +9,14 @@ public class PlayField : MonoBehaviour {
     public int gridSizeX, gridSizeY, gridSizeZ;
     [Header("Blocks")]
     public GameObject[] blockList;
+    public GameObject[] ghostList;
+
 
     [Header("Playfield Visuals")]
     public GameObject bottomPlane;
     public GameObject N, S, W, E;
+
+    int randomIndex;
 
     public Transform[,,] theGrid;
 
@@ -24,6 +28,9 @@ public class PlayField : MonoBehaviour {
     void Start()
     {
         theGrid = new Transform[gridSizeX, gridSizeY, gridSizeZ];
+        //CalculatePreview();
+        SpawnNewBlock();
+
     }
 
     public Vector3 Round(Vector3 vec)
@@ -98,17 +105,89 @@ public class PlayField : MonoBehaviour {
         Vector3 spawnPoint = new Vector3((int)(transform.position.x + (float)gridSizeX / 2),
                                             (int)transform.position.y + gridSizeY,
                                             (int)(transform.position.z + (float)gridSizeZ / 2));
-        int randomIndex = Random.Range(0, blockList.Length);
+        //int randomIndex = Random.Range(0, blockList.Length);
 
         //SPAWN THE BLOCK
         GameObject newBlock = Instantiate(blockList[randomIndex], spawnPoint, Quaternion.identity) as GameObject;
         //GHOST
+        GameObject newGhost = Instantiate(ghostList[randomIndex], spawnPoint, Quaternion.identity) as GameObject;
+        newGhost.GetComponent<GhostBlock>().SetParent(newBlock);
 
-        //SET INPUTS
+        CalculatePreview();
+        PreView.instance.ShowPreview(randomIndex);
     }
 
+    public void CalculatePreview()
+    {
+       randomIndex = Random.Range(0, blockList.Length);
+    }
 
+    public void DeleteLayer()
+    {
+        //repeat iteration top to bottom
+        for (int y = gridSizeY-1; y >= 0; y--)
+        {
+            //CHECK FULL LAYER
+            if(CheckFullLayer(y))
+            {
+                //DELETE ALL BLOCK
+                DeleteLayerAt(y);
+                //MOVE ALL DOWN BY 1
+                MoveAllLayerDown(y);
+            }
+        }
+    }
 
+    bool CheckFullLayer(int y)
+   {
+        for (int x = 0; x < gridSizeX; x++)
+        {
+            for (int z = 0; z < gridSizeZ; z++)
+            {
+                if(theGrid[x,y,z] == null)
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    void DeleteLayerAt(int y)
+    {
+        for (int x = 0; x < gridSizeX; x++)
+        {
+            for (int z = 0; z < gridSizeZ; z++)
+            {
+                Destroy(theGrid[x, y, z].gameObject);
+                theGrid[x, y, z] = null;
+            }
+        }
+    }
+
+    void MoveAllLayerDown(int y)
+    {
+        for (int i = y; i< gridSizeY; i++)
+        {
+            MoveOneLayerDown(i);
+        }
+    }
+
+    void MoveOneLayerDown(int y)
+    {
+        for (int x = 0; x < gridSizeX; x++)
+        {
+            for (int z = 0; z < gridSizeZ; z++)
+            {
+                if(theGrid[x,y,z] != null)
+                {
+                    theGrid[x, y - 1, z] = theGrid[x, y, z];
+                    theGrid[x, y, z] = null;
+                    theGrid[x, y - 1, z].position += Vector3.down; 
+                }
+            }
+        }
+    }
 
     void OnDrawGizmos()
     {

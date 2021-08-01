@@ -9,7 +9,7 @@ public class TetrisBlock : MonoBehaviour {
 
     void Start()
     {
-        
+        ButtonInput.instance.SetActiveBlock(gameObject, this);
     }
 
     void Update()
@@ -22,7 +22,8 @@ public class TetrisBlock : MonoBehaviour {
             if (!CheckValidMove())
             {
                 transform.position += Vector3.up;
-                
+                //DELETE LAYER IF POSSIBLE
+                PlayField.instance.DeleteLayer();
                 enabled = false;
                 //CREATE A NEW TETRIS BLOCK
                 PlayField.instance.SpawnNewBlock();
@@ -36,6 +37,50 @@ public class TetrisBlock : MonoBehaviour {
             prevTime = Time.time;
         }
 
+            if(Input.GetKeyDown(KeyCode.LeftArrow)) 
+            {
+                SetInput(Vector3.left);
+            }
+
+            if (Input.GetKeyDown(KeyCode.RightArrow)) {
+                SetInput(Vector3.right);
+            }
+
+            if (Input.GetKeyDown(KeyCode.UpArrow)) {
+                //SetInput(Vector3.forward);
+                SetRotationInput(new Vector3(90, 0, 0));
+            }
+
+            if (Input.GetKeyDown(KeyCode.DownArrow)) {
+                //SetInput(Vector3.back);
+                SetRotationInput(new Vector3(-90, 0, 0));
+            }
+    }
+
+    public void SetInput(Vector3 direction)
+    {
+        transform.position += direction;
+        if(!CheckValidMove())
+        {
+            transform.position -= direction;
+        } 
+        else
+        {
+            PlayField.instance.UpdateGrid(this);
+        }
+    }
+
+    public void SetRotationInput(Vector3 rotation)
+    {
+        transform.Rotate(rotation, Space.World);
+        if(!CheckValidMove())
+        {
+            transform.Rotate(-rotation, Space.World);
+        }
+        else
+        {
+            PlayField.instance.UpdateGrid(this);
+        }
     }
 
     //check if object touches the ground or another object an within distance and shape
@@ -60,5 +105,10 @@ public class TetrisBlock : MonoBehaviour {
             }
         }
         return true;
+    }
+
+    public void SetSpeed()
+    {
+        fallTime = 0.1f;
     }
 }
