@@ -10,6 +10,11 @@ public class TetrisBlock : MonoBehaviour {
     void Start()
     {
         ButtonInput.instance.SetActiveBlock(gameObject, this);
+        fallTime = GameManager.instance.ReadFallSpeed();
+        if(!CheckValidMove())
+        {
+            GameManager.instance.SetGameIsOver();
+        }
     }
 
     void Update()
@@ -26,7 +31,10 @@ public class TetrisBlock : MonoBehaviour {
                 PlayField.instance.DeleteLayer();
                 enabled = false;
                 //CREATE A NEW TETRIS BLOCK
-                PlayField.instance.SpawnNewBlock();
+                if(!GameManager.instance.ReadGameIsOver())
+                {
+                    PlayField.instance.SpawnNewBlock();
+                }
             } 
             else
             {

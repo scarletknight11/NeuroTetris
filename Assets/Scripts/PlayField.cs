@@ -124,17 +124,23 @@ public class PlayField : MonoBehaviour {
 
     public void DeleteLayer()
     {
+        int layersCleared = 0;
         //repeat iteration top to bottom
         for (int y = gridSizeY-1; y >= 0; y--)
         {
             //CHECK FULL LAYER
             if(CheckFullLayer(y))
             {
+                layersCleared++;
                 //DELETE ALL BLOCK
                 DeleteLayerAt(y);
                 //MOVE ALL DOWN BY 1
                 MoveAllLayerDown(y);
             }
+        }
+        if(layersCleared > 0)
+        {
+            GameManager.instance.LayersCleared(layersCleared);
         }
     }
 

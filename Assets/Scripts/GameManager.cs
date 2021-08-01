@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour {
 
@@ -10,17 +11,28 @@ public class GameManager : MonoBehaviour {
     int level;
     int layerCleared;
 
+    bool gameIsOver;
+
     float fallSpeed;
+
 
     void Awake()
     {
         instance = this;
     }
+
+
     
+    void Start()
+    {
+        //GameOverWindow.SetActive(false);
+        SetScore(score);
+    }
     public void SetScore(int amount)
     {
         score += amount;
         CalculateLevel();
+        UIHandler.instance.UpdateUI(score, level, layerCleared);
         //Update UI
     }
     
@@ -49,6 +61,7 @@ public class GameManager : MonoBehaviour {
         }
         layerCleared += amount;
         //UPDATE UI
+        UIHandler.instance.UpdateUI(score, level, layerCleared);
     }
 
     void CalculateLevel()
@@ -105,4 +118,21 @@ public class GameManager : MonoBehaviour {
         }
         //UPDATE UI
     }
+
+    public bool ReadGameIsOver()
+    {
+        return gameIsOver;
+    }
+
+    public void SetGameIsOver()
+    {
+        gameIsOver = true;
+        UIHandler.instance.ActivateSetGameOverWindow();
+    }
+
+    public void Restart()
+    {
+        SceneManager.LoadScene("SampleScene");
+    }
+
 }
