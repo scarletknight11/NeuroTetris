@@ -10,6 +10,7 @@ public class UIHandler : MonoBehaviour {
     public Text leveltext;
     public Text layersText;
     public GameObject GameOverWindow;
+    public Text EEG;
 
 
     void Awake()
